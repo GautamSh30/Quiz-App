@@ -72,7 +72,8 @@ export async function getQuizById(req, res) {
 
 export async function submitQuizAnswers(req, res) {
   try {
-    const { quizId, answers } = req.body;
+    const { quizId } = req.params;
+    const { answers } = req.body;
     const userId = req.user._id;
 
     const quiz = await Quiz.findById(quizId);

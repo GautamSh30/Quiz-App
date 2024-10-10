@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 const answerSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,

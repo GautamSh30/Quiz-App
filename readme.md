@@ -9,7 +9,10 @@ JWT_SECRET=your_jwt_secret_key
 ### Start the app
 
 ```shell
-npm run start
+npm i
+```
+```shell
+npm start
 ```
 
 ### Screenshots

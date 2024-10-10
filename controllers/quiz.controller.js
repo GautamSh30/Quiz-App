@@ -4,25 +4,36 @@ import { Answer } from "../models/answer.model.js";
 
 export async function createQuiz(req, res) {
   try {
-    const { title, description } = req.body;
-    const creator = req.user._id;
+    const { title, description, questions } = req.body;
+    const creatorId = req.user._id;
 
-    if (!title) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Title is required" });
+    if (!questions || questions.length !== 5) {
+      return res.status(400).json({
+        success: false,
+        message: "A quiz must contain exactly 5 questions.",
+      });
     }
 
-    const quiz = new Quiz({
+    const newQuiz = new Quiz({
       title,
       description,
-      creator,
+      creator: creatorId,
     });
+    await newQuiz.save();
 
-    await quiz.save();
-    res.status(201).json({ success: true, quiz });
+    const questionDocs = questions.map((question) => {
+      const { text, options, correct_option } = question;
+      return new Question({
+        quiz: newQuiz._id,
+        text,
+        options,
+        correct_option,
+      });
+    });
+    await Question.insertMany(questionDocs);
+    res.status(201).json({ success: true, quiz: newQuiz });
   } catch (error) {
-    console.log("Error creating quiz", error.message);
+    console.log("Error in creating quiz:", error.message);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 }

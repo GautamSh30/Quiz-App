@@ -4,7 +4,7 @@ import { ENV_VARS } from "../config/envVars.js";
 
 export const authenticateUser = async (req, res, next) => {
   try {
-    const token = req.cookies["jwt-netflix"];
+    const token = req.cookies["jwt-quiz"];
     if (!token) {
       return res
         .status(401)
